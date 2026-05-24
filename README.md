@@ -1,54 +1,3 @@
-```markdown
-# DCT Geo Desync
-
-Bài thực hành Labtainers khảo sát tấn công **desynchronization** vào kỹ thuật giấu tin ảnh trên miền tần số bằng **DCT 8x8**.
-
-Bài lab giúp sinh viên quan sát cách các biến đổi hình học nhẹ như:
-
-- Translation
-- Crop
-- Rotation nhẹ
-
-có thể làm lệch lưới block DCT 8x8, khiến quá trình trích xuất thông điệp bị sai dù ảnh vẫn còn khá giống ảnh gốc theo cảm nhận thị giác.
-
----
-
-# Mục tiêu
-
-Sau khi hoàn thành bài thực hành, sinh viên có thể:
-
-- Hiểu cơ chế giấu tin ảnh dựa trên block DCT 8x8.
-- Hiểu vì sao bộ trích xuất DCT phụ thuộc vào đồng bộ vị trí block.
-- Quan sát ảnh hưởng của translation tới BER.
-- Quan sát ảnh hưởng của crop tới lưới block DCT.
-- Quan sát ảnh hưởng của rotation nhẹ tới quá trình trích xuất.
-- Tự tạo ít nhất 6 ảnh attacked khác nhau.
-- Ghi nhận và phân tích các chỉ số BER, PSNR, SSIM.
-- Viết báo cáo giải thích vì sao lệch block DCT làm trích xuất sai.
-
----
-
-# Kiến thức chính
-
-## Giấu tin bằng DCT 8x8
-
-Ảnh được chia thành các block kích thước 8x8. Với mỗi block, thuật toán tính biến đổi DCT và nhúng bit bằng cách thay đổi quan hệ giữa hai hệ số trung tần.
-
-Ví dụ:
-
-```text
-bit = 1 nếu C(3,4) > C(4,3)
-bit = 0 nếu C(3,4) < C(4,3)
-```
-
-Trong đó:
-
-- `C(3,4)`: hệ số DCT tại vị trí tần số trung bình.
-- `C(4,3)`: hệ số DCT thứ hai dùng để so sánh.
-- Quan hệ giữa hai hệ số được dùng để mã hóa bit.
-
----
-
 ## Desynchronization Attack
 
 Desynchronization attack không nhất thiết phá mạnh nội dung ảnh. Thay vào đó, nó làm lệch hệ tọa độ hoặc lưới block mà bộ trích xuất đang sử dụng.
@@ -444,6 +393,33 @@ Kết quả mong đợi:
 
 ---
 
+# Kiểm tra metrics
+
+Sau khi hoàn thành các attack, xem file:
+
+```bash
+cat metrics.csv
+```
+
+Kết quả gồm các cột:
+
+```text
+task,image,ber,psnr,ssim,decoded_message
+```
+
+Sinh viên cần có ít nhất 6 dòng tương ứng với 6 ảnh attacked:
+
+```text
+attacked_translate_small.pgm
+attacked_translate_large.pgm
+attacked_crop_margin.pgm
+attacked_crop_window.pgm
+attacked_rotate_cw.pgm
+attacked_rotate_ccw.pgm
+```
+
+---
+
 # Checkwork
 
 Thoát khỏi container:
@@ -457,6 +433,22 @@ Chạy trên host Labtainer:
 ```bash
 checkwork dct-geo-desync
 ```
+
+Kết quả mong đợi:
+
+```text
+Y - task1_grid
+Y - task2_baseline
+Y - task3_translate_small
+Y - task4_translate_large
+Y - task5_crop_margin
+Y - task6_crop_window
+Y - task7_rotate_cw
+Y - task8_rotate_ccw
+Y - task9_report
+```
+
+---
 
 # Kết luận mong đợi
 
